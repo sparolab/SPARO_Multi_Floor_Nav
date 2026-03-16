@@ -17,23 +17,13 @@ git clone --recursive https://github.com/sparolab/SPARO_Multi_Floor_Nav.git .
 ```bash
 cd ${YOUR_WORKSPACE_PATH}
 mv src/docker ./docker
-
 cd docker
 
 xhost +local:docker
-
 chmod +x container_build.sh container_run.sh
 
 ./container_build.sh
-
 ./container_run.sh
-
-# Attach to the running container
-docker attach mfnav_container
-# (From another terminal) access the same container
-docker exec -it mfnav_container /bin/bash
-
-cd /home/test_ws
 ```
 
 ### Option B: Pull Pre-built Image
@@ -42,17 +32,28 @@ docker pull sparolab/mfnav:latest
 
 xhost +local:docker
 
-docker run -it \
+docker run -itd --privileged --gpus all --network host \
   --name mfnav_container \
-  --gpus all \
-  --privileged \
-  --net=host \
-  --ipc=host \
-  -e DISPLAY=$DISPLAY \
+  --env="DISPLAY=$DISPLAY" \
+  --env="QT_X11_NO_MITSHM=1" \
+  --env="NVIDIA_VISIBLE_DEVICES=all" \
+  --env="NVIDIA_DRIVER_CAPABILITIES=all" \
+  --env XDG_RUNTIME_DIR=/tmp/runtime-root \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
+  -v /etc/machine-id:/etc/machine-id \
+  -v /usr/lib/nvidia:/usr/lib/nvidia \
+  -v /tmp/runtime-root:/tmp/runtime-root \
+  -v /usr/lib/x86_64-linux-gnu/libGL.so.1:/usr/lib/x86_64-linux-gnu/libGL.so.1 \
+  -v ${YOUR_WORKSPACE_PATH}:/home/test_ws \
+  -v /dev:/dev \
+  -w /home/test_ws \
   sparolab/mfnav:latest
+```
 
-# (From another terminal) access the same container
+### Enter Container
+```bash
+docker attach mfnav_container
+# (From another terminal)
 docker exec -it mfnav_container /bin/bash
 
 cd /home/test_ws
