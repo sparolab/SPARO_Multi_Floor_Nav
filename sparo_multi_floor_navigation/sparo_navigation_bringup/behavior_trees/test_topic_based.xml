@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="Main">
+
+  <!-- ========================================
+       Topic-based Multi-Floor Navigation
+       Uses separate BT runners for elevator/stairs
+       ======================================== -->
+  <BehaviorTree ID="Main">
+    <Sequence name="TopicBasedScenario">
+
+      <LogMessage message="=== Topic-Based Scenario Start ==="/>
+
+      <!-- ========== L1 Patrol ========== -->
+      <LogMessage message="[L1] Starting L1 patrol"/>
+      <SwitchMap floor="L1"/>
+      <SetInitialPose floor="L1" pose_type="default"/>
+      <PatrolWaypoints floor="L1" waypoint_type="patrol" loop="false"/>
+      <LogMessage message="[L1] Patrol complete"/>
+
+      <!-- ========== Go to elevator and request L2 ========== -->
+      <LogMessage message="[L1->L2] Going to elevator..."/>
+      <GetPatrolPose floor="L1" pose_type="elevator" goal_pose="{elev_pose}"/>
+      <Nav2NavigateToPose entry_pose="{elev_pose}"/>
+      <LogMessage message="[L1->L2] At elevator, requesting floor change to L2"/>
+
+      <!-- Try elevator first -->
+      <Fallback name="ElevatorOrStairs_L1toL2">
+        <Sequence name="TryElevator">
+          <PublishFloorRequest topic="/elevator/floor_request" target_floor="1"/>
+          <WaitForTopicMessage topic="/floor_change_complete" timeout="180.0" elevator_used="{elevator_info}"/>
+          <LogMessage message="[L1->L2] Arrived at L2 via ELEVATOR"/>
+        </Sequence>
+
+        <!-- Fallback to stairs if elevator fails -->
+        <Sequence name="UseStairs">
+          <LogMessage message="[L1->L2] Elevator failed, going to stairs"/>
+
+          <!-- Navigate to stairs entrance -->
+          <GetPatrolPose floor="L1" pose_type="stair" goal_pose="{stair_pose}"/>
+          <Nav2NavigateToPose entry_pose="{stair_pose}"/>
+          <LogMessage message="[L1->L2] At stairs, requesting climb"/>
+
+          <PublishFloorRequest topic="/stairs/floor_request" target_floor="1"/>
+          <WaitForTopicMessage topic="/floor_change_complete" timeout="180.0" elevator_used="{elevator_info}"/>
+          <LogMessage message="[L1->L2] Arrived at L2 via STAIRS"/>
+        </Sequence>
+      </Fallback>
+
+      <!-- ========== L2 Patrol ========== -->
+      <LogMessage message="[L2] Starting L2 patrol"/>
+      <SwitchMap floor="L2"/>
+      <SetInitialPose floor="L2" pose_type="auto"/>
+      <PatrolWaypoints floor="L2" waypoint_type="patrol" loop="false"/>
+      <LogMessage message="[L2] Patrol complete"/>
+
+      <!-- ========== Navigate to intruder area and return to elevator ========== -->
+      <NavigateToIntruder position_x="15.0" position_y="-32.5" position_z="5.0" yaw="0.0"/>
+      <GetPatrolPose floor="L2" pose_type="elevator" goal_pose="{elev_pose_l2}"/>
+      <Nav2NavigateToPose entry_pose="{elev_pose_l2}"/>
+      <LogMessage message="[L2->L3] At elevator, requesting L3"/>
+
+      <!-- ========== Go to L3 ========== -->
+      <PublishFloorRequest topic="/elevator/floor_request" target_floor="2"/>
+      <WaitForTopicMessage topic="/floor_change_complete" timeout="180.0" elevator_used="{elevator_info}"/>
+      <LogMessage message="[L2->L3] Arrived at L3"/>
+
+      <!-- ========== L3 Investigation ========== -->
+      <SwitchMap floor="L3"/>
+      <SetInitialPose floor="L3" pose_type="default"/>
+      <NavigateToIntruder position_x="15.0" position_y="-32.5" position_z="10.0" yaw="0.0"/>
+
+      <LogMessage message="=== SCENARIO COMPLETE ==="/>
+
+    </Sequence>
+  </BehaviorTree>
+
+</root>

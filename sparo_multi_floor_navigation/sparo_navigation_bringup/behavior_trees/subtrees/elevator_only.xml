@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="ElevatorSequence">
+
+  <BehaviorTree ID="ElevatorSequence">
+    <Sequence name="ElevatorControl">
+
+      <SelectNearestElevator
+          world_frame="map"
+          base_frame="base_link"
+          lift1_yaml="/home/test_ws/install/sparo_navigation_bringup/share/sparo_navigation_bringup/config/elevator/elevator_lift1.yaml"
+          lift2_yaml="/home/test_ws/install/sparo_navigation_bringup/share/sparo_navigation_bringup/config/elevator/elevator_lift2.yaml"
+          current_floor="{current_floor}"
+          elev_yaml="{elev_yaml}"
+          elevator_ns="{elevator_ns}"
+          elevator_entrance="{elevator_entrance}"/>
+
+      <Nav2NavigateToPose entry_pose="{elevator_entrance}" success_radius="0.5"/>
+
+      <WaitRobotNearElevator
+          elevator_yaml="{elev_yaml}"
+          world_frame="map"
+          base_frame="base_link"
+          timeout="120.0"/>
+
+      <!-- Close door before calling elevator to current floor -->
+      <SetElevatorDoor
+          elevator_yaml="{elev_yaml}"
+          elevator_ns="{elevator_ns}"
+          open="false"/>
+
+      <CallElevatorToFloor
+          elevator_yaml="{elev_yaml}"
+          elevator_ns="{elevator_ns}"
+          floor_idx="{current_floor}"
+          timeout="30.0"/>
+
+      <WaitCabinAtTarget
+          elevator_yaml="{elev_yaml}"
+          elevator_ns="{elevator_ns}"
+          floor_idx="{current_floor}"
+          timeout="20.0"/>
+
+      <Fallback name="EnsureDoorOpenForBoarding">
+        <WaitDoorOpen
+            elevator_yaml="{elev_yaml}"
+            elevator_ns="{elevator_ns}"
+            want_open="true"
+            open_threshold="0.7"
+            timeout="2.0"/>
+        <Sequence name="OpenThenWaitForBoarding">
+          <SetElevatorDoor
+              elevator_yaml="{elev_yaml}"
+              elevator_ns="{elevator_ns}"
+              open="true"/>
+          <WaitDoorOpen
+              elevator_yaml="{elev_yaml}"
+              elevator_ns="{elevator_ns}"
+              want_open="true"
+              open_threshold="0.7"
+              timeout="5.0"/>
+        </Sequence>
+      </Fallback>
+
+      <!-- Check if elevator is accessible after door opens -->
+      <LogMessage message="[Elevator] Checking accessibility..."/>
+      <CheckElevatorAccessible floor="L1" elevator_ns="{elevator_ns}"/>
+      <LogMessage message="[Elevator] Elevator accessible, entering"/>
+
+      <GetCabinGoal
+        elevator_yaml="{elev_yaml}"
+        floor_idx="{current_floor}"
+        cabin_goal="{cabin_goal}"/>
+
+      <Nav2NavigateToPose entry_pose="{cabin_goal}" yaw_tolerance="0.3"/>
+
+      <WaitRobotInsideCabin
+          elevator_yaml="{elev_yaml}"
+          world_frame="map"
+          base_frame="base_link"
+          timeout="60.0"/>
+
+      <Fallback name="EnsureDoorClosedBeforeDepart">
+        <Sequence name="IfOpenThenClose">
+          <WaitDoorOpen
+              elevator_yaml="{elev_yaml}"
+              elevator_ns="{elevator_ns}"
+              want_open="true"
+              open_threshold="0.7"
+              timeout="5.0"/>
+          <SetElevatorDoor
+              elevator_yaml="{elev_yaml}"
+              elevator_ns="{elevator_ns}"
+              open="false"/>
+          <WaitDoorOpen
+              elevator_yaml="{elev_yaml}"
+              elevator_ns="{elevator_ns}"
+              want_open="false"
+              open_threshold="0.02"
+              timeout="5.0"/>
+        </Sequence>
+        <AlwaysSuccess/>
+      </Fallback>
+
+      <CallElevatorToFloor
+          elevator_yaml="{elev_yaml}"
+          elevator_ns="{elevator_ns}"
+          floor_idx="{target_floor}"
+          timeout="30.0"/>
+
+      <WaitCabinAtTarget
+          elevator_yaml="{elev_yaml}"
+          elevator_ns="{elevator_ns}"
+          floor_idx="{target_floor}"
+          timeout="20.0"/>
+
+      <Fallback name="EnsureDoorOpenForExit">
+        <WaitDoorOpen
+            elevator_yaml="{elev_yaml}"
+            elevator_ns="{elevator_ns}"
+            want_open="true"
+            open_threshold="0.7"
+            timeout="2.0"/>
+        <Sequence name="OpenThenWaitForExit">
+          <SetElevatorDoor
+              elevator_yaml="{elev_yaml}"
+              elevator_ns="{elevator_ns}"
+              open="true"/>
+          <WaitDoorOpen
+              elevator_yaml="{elev_yaml}"
+              elevator_ns="{elevator_ns}"
+              want_open="true"
+              open_threshold="0.7"
+              timeout="5.0"/>
+        </Sequence>
+      </Fallback>
+
+      <LogMessage message="[Elevator] Target floor reached, door opened - Elevator BT complete"/>
+
+    </Sequence>
+  </BehaviorTree>
+
+</root>

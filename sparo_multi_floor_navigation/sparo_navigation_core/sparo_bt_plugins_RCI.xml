@@ -1,0 +1,118 @@
+<library path="sparo_bt_nav2_plugin">
+  <!-- Door Nodes -->
+  <class name="sparo_navigation_core::DoorPlanController"
+         type="sparo_navigation_core::DoorPlanController"
+         base_class_type="BT::StatefulActionNode">
+    <description>Control doors based on current Nav2 plan and door definitions</description>
+  </class>
+
+  <class name="sparo_navigation_core::PublishDoorYaml"
+         type="sparo_navigation_core::PublishDoorYaml"
+         base_class_type="BT::SyncActionNode">
+    <description>Publish a door YAML path to trigger door configuration reload</description>
+  </class>
+
+  <!-- Elevator Nodes -->
+  <class name="elevator_bt::CallElevatorToFloor"
+         type="elevator_bt::CallElevatorToFloor"
+         base_class_type="BT::StatefulActionNode">
+  <description>Call the elevator to a requested floor via ElevatorClient</description>
+  </class>
+
+  <class name="elevator_bt::GetCabinGoal"
+         type="elevator_bt::GetCabinGoal"
+         base_class_type="BT::SyncActionNode">
+    <description>Load elevator YAML and compute the cabin goal pose/target for elevator operations</description>
+  </class>
+
+  <class name="sparo_navigation_core::SelectNearestElevator"
+         type="sparo_navigation_core::SelectNearestElevator"
+         base_class_type="BT::SyncActionNode">
+  <description>Select the nearest elevator using TF/cabin_z and write the choice to blackboard</description>
+  </class>
+
+  <class name="sparo_navigation_core::SetElevatorDoor"
+         type="sparo_navigation_core::SetElevatorDoor"
+         base_class_type="BT::SyncActionNode">
+    <description>Open/close the elevator door using ElevatorClient</description>
+  </class>
+
+  <class name="sparo_navigation_core::WaitDoorOpen"
+         type="sparo_navigation_core::WaitDoorOpen"
+         base_class_type="BT::StatefulActionNode">
+    <description>Wait until the elevator door reaches the desired open/close state</description>
+  </class>
+
+  <class name="sparo_navigation_core::WaitCabinAtTarget"
+         type="sparo_navigation_core::WaitCabinAtTarget"
+         base_class_type="BT::StatefulActionNode">
+    <description>Wait until the elevator cabin z matches the target floor height within tolerance</description>
+  </class>
+
+  <class name="sparo_navigation_core::WaitFloorCommand"
+         type="sparo_navigation_core::WaitFloorCommand"
+         base_class_type="BT::StatefulActionNode">
+    <description>Wait for a floor request command from a topic</description>
+  </class>
+
+  <class name="sparo_navigation_core::WaitRobotNearElevator"
+         type="sparo_navigation_core::WaitRobotNearElevator"
+         base_class_type="BT::StatefulActionNode">
+    <description>Wait until the robot is within the elevator-front zone defined in elevator YAML.</description>
+  </class>
+
+  <class name="sparo_navigation_core::WaitRobotInsideCabin"
+         type="sparo_navigation_core::WaitRobotInsideCabin"
+         base_class_type="BT::StatefulActionNode">
+    <description>Wait until the robot is inside the elevator cabin zone defined in elevator YAML.</description>
+  </class>
+
+  <class name="sparo_navigation_core::WaitRobotOutsideElevator"
+         type="sparo_navigation_core::WaitRobotOutsideElevator"
+         base_class_type="BT::StatefulActionNode">
+    <description>Wait until the robot is outside the elevator area/zone defined in elevator YAML.</description>
+  </class>
+
+  <!-- Stairs Nodes -->
+  <class name="sparo_navigation_core::AlignWithStairs"
+         type="sparo_navigation_core::AlignWithStairs"
+         base_class_type="BT::StatefulActionNode">
+    <description>Rotate in place to align the robot yaw with the stairs entry yaw defined in the stair YAML</description>
+  </class>
+
+  <class name="sparo_navigation_core::CheckFloorDifferent"
+         type="sparo_navigation_core::CheckFloorDifferent"
+         base_class_type="BT::SyncActionNode">
+    <description>Compare current_floor and target_floor, output floors_to_climb and direction</description>
+  </class>
+
+  <class name="sparo_navigation_core::ClimbFlightRL"
+         type="sparo_navigation_core::ClimbFlightRL"
+         base_class_type="BT::StatefulActionNode">
+    <description>Climb one stair flight using cmd_vel while monitoring TF z change with tolerance and optional timeout</description>
+  </class>
+
+  <class name="sparo_navigation_core::ComputeNextFloor"
+         type="sparo_navigation_core::ComputeNextFloor"
+         base_class_type="BT::SyncActionNode">
+    <description>Compute next_floor from current_floor and direction</description>
+  </class>
+
+  <class name="sparo_navigation_core::GetCurrentFloor"
+         type="sparo_navigation_core::GetCurrentFloor"
+         base_class_type="BT::StatefulActionNode">
+    <description>Estimate current floor index from TF z using floor z thresholds and output current_floor.</description>
+  </class>
+
+  <class name="sparo_navigation_core::GetTargetFloorFromTopic"
+         type="sparo_navigation_core::GetTargetFloorFromTopic"
+         base_class_type="BT::StatefulActionNode">
+    <description>Subscribe to a floor request topic and output target_floor when a message arrives </description>
+  </class>
+
+  <class name="sparo_navigation_core::MoveForwardDistance"
+         type="sparo_navigation_core::MoveForwardDistance"
+         base_class_type="BT::StatefulActionNode">
+    <description>Drive forward by a given distance using cmd_vel while tracking odom_frame→base_frame TF</description>
+  </class>
+</library>

@@ -1,0 +1,101 @@
+<library path="sparo_bt_nav2_plugin">
+  <!-- Navigation Nodes -->
+  <class name="sparo_navigation_core::PatrolWaypoints"
+         type="sparo_navigation_core::PatrolWaypoints"
+         base_class_type="BT::StatefulActionNode">
+    <description>Patrol through waypoints with Nav2</description>
+  </class>
+
+  <class name="sparo_navigation_core::NavigateToElevatorFront"
+         type="sparo_navigation_core::NavigateToElevatorFront"
+         base_class_type="BT::StatefulActionNode">
+    <description>Navigate to elevator front position</description>
+  </class>
+
+  <class name="sparo_navigation_core::EnterElevator"
+         type="sparo_navigation_core::EnterElevator"
+         base_class_type="BT::StatefulActionNode">
+    <description>Enter elevator</description>
+  </class>
+
+  <class name="sparo_navigation_core::ExitElevator"
+         type="sparo_navigation_core::ExitElevator"
+         base_class_type="BT::StatefulActionNode">
+    <description>Exit elevator</description>
+  </class>
+
+  <class name="sparo_navigation_core::TurnInElevator"
+         type="sparo_navigation_core::TurnInElevator"
+         base_class_type="BT::StatefulActionNode">
+    <description>Turn 180 degrees inside elevator</description>
+  </class>
+
+  <class name="sparo_navigation_core::NavigateToStairs"
+         type="sparo_navigation_core::NavigateToStairs"
+         base_class_type="BT::StatefulActionNode">
+    <description>Navigate to stairs front position</description>
+  </class>
+
+  <class name="sparo_navigation_core::SwitchMap"
+         type="sparo_navigation_core::SwitchMap"
+         base_class_type="BT::StatefulActionNode">
+    <description>Switch map for different floors</description>
+  </class>
+
+  <class name="sparo_navigation_core::SetInitialPose"
+         type="sparo_navigation_core::SetInitialPose"
+         base_class_type="BT::SyncActionNode">
+    <description>Set initial pose for localization</description>
+  </class>
+
+  <!-- Elevator Nodes -->
+  <class name="sparo_navigation_core::CallElevator"
+         type="sparo_navigation_core::CallElevator"
+         base_class_type="BT::SyncActionNode">
+    <description>Call elevator to target floor</description>
+  </class>
+
+  <class name="sparo_navigation_core::OpenElevatorDoor"
+         type="sparo_navigation_core::OpenElevatorDoor"
+         base_class_type="BT::SyncActionNode">
+    <description>Open or close elevator door</description>
+  </class>
+
+  <class name="sparo_navigation_core::WaitElevatorArrival"
+         type="sparo_navigation_core::WaitElevatorArrival"
+         base_class_type="BT::StatefulActionNode">
+    <description>Wait for elevator to arrive at target floor</description>
+  </class>
+
+  <class name="sparo_navigation_core::CheckElevatorAccessible"
+         type="sparo_navigation_core::CheckElevatorAccessible"
+         base_class_type="BT::ConditionNode">
+    <description>Check if elevator path is accessible via costmap</description>
+  </class>
+
+  <!-- Stairs Nodes -->
+  <class name="sparo_navigation_core::StairNavigationAction"
+         type="sparo_navigation_core::StairNavigationAction"
+         base_class_type="BT::StatefulActionNode">
+    <description>Navigate stairs using cmd_vel</description>
+  </class>
+
+  <class name="sparo_navigation_core::DriveForward"
+         type="sparo_navigation_core::DriveForward"
+         base_class_type="BT::StatefulActionNode">
+    <description>Drive forward with optional heading correction</description>
+  </class>
+
+  <!-- Utility Nodes -->
+  <class name="sparo_navigation_core::LogMessage"
+         type="sparo_navigation_core::LogMessage"
+         base_class_type="BT::SyncActionNode">
+    <description>Log a message to ROS2 logger</description>
+  </class>
+
+  <class name="sparo_navigation_core::IsSystemInitialized"
+         type="sparo_navigation_core::IsSystemInitialized"
+         base_class_type="BT::ConditionNode">
+    <description>Check if system is initialized</description>
+  </class>
+</library>

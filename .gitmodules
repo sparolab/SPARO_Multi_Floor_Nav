@@ -1,0 +1,6 @@
+[submodule "RCI_quadruped_robot_navigation"]
+	path = RCI_quadruped_robot_navigation
+	url = git@github.com:sparolab/RCI_quadruped_robot_navigation.git
+[submodule "yolo_ros"]
+	path = yolo_ros
+	url = git@github.com:sparolab/yolo_ros.git

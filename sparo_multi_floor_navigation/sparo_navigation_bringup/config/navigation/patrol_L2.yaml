@@ -1,0 +1,24 @@
+patrol:
+  name: "L2_patrol_route"
+  height: 5.0                # [m] Floor height
+
+  initial_pose:
+    default: { x: 8.29, y: -32.42, yaw: -3.04 }
+    stair: { x: 30.889, y: -33.922, yaw: -1.514 }
+    elevator: { x: 15.54, y: -21.52, yaw: 0.049 }
+    elevator_lift1_inside: { x: 19.686, y: -18.892, yaw: -1.514 }
+    elevator_lift1_outside: { x: 19.686, y: -21.798, yaw: -1.514 }
+    elevator_lift2_inside: { x: 16.880, y: -24.104, yaw: 1.514 }
+    elevator_lift2_outside: { x: 16.880, y: -21.197, yaw: 1.514 }
+
+  waypoints:
+    - { x: 21.51, y: -35.31, yaw: -1.00 }
+    - { x: 14.46, y: -32.08, yaw: -1.51 }
+    - { x: 9.41,  y: -32.48, yaw: -0.17 }
+    - { x: 14.09, y: -27.67, yaw: -1.51 }
+    # - { x: 14.31, y: -10.44,  yaw: 0.99 }
+
+thresholds:
+  distance: 0.7              # [m]
+  position: 0.7              # [m]
+  orientation: 0.7           # [rad]

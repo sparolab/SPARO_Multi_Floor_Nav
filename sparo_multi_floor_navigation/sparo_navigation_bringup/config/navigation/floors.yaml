@@ -1,0 +1,16 @@
+# Floor metadata configuration
+floors:
+  L1:
+    floor_index: 0
+    height: 0.0        # [m]
+    map_file: "hotel_L1.yaml"
+    
+  L2:
+    floor_index: 1
+    height: 5.0        # [m]
+    map_file: "hotel_L2.yaml"
+    
+  L3:
+    floor_index: 2
+    height: 10.0       # [m]
+    map_file: "hotel_L3.yaml"
