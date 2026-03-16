@@ -12,6 +12,8 @@ git clone --recursive https://github.com/sparolab/SPARO_Multi_Floor_Nav.git .
 ---
 
 ## 🐋 Docker Setup
+
+### Option A: Build from Dockerfile
 ```bash
 cd ${YOUR_WORKSPACE_PATH}
 mv src/docker ./docker
@@ -28,6 +30,28 @@ chmod +x container_build.sh container_run.sh
 
 # Attach to the running container
 docker attach mfnav_container
+# (From another terminal) access the same container
+docker exec -it mfnav_container /bin/bash
+
+cd /home/test_ws
+```
+
+### Option B: Pull Pre-built Image
+```bash
+docker pull sparolab/mfnav:latest
+
+xhost +local:docker
+
+docker run -it \
+  --name mfnav_container \
+  --gpus all \
+  --privileged \
+  --net=host \
+  --ipc=host \
+  -e DISPLAY=$DISPLAY \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  sparolab/mfnav:latest
+
 # (From another terminal) access the same container
 docker exec -it mfnav_container /bin/bash
 
