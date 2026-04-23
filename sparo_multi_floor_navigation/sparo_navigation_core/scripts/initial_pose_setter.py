@@ -3,6 +3,7 @@
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import PoseWithCovarianceStamped
+from std_msgs.msg import String
 import math
 import time
 
@@ -23,6 +24,7 @@ class InitialPoseSetter(Node):
 
         self.pose_pub = self.create_publisher(
             PoseWithCovarianceStamped, '/initialpose', 10)
+        self.floor_pub = self.create_publisher(String, '/current_floor', 10)
 
         # Wait for AMCL to be ready, then publish
         self.timer = self.create_timer(5.0, self.publish_initial_pose)
@@ -53,6 +55,11 @@ class InitialPoseSetter(Node):
             self.get_logger().info(
                 f'[InitialPoseSetter] Published initial pose ({i+1}/5)')
             time.sleep(0.5)
+
+        floor_msg = String()
+        floor_msg.data = self.floor
+        self.floor_pub.publish(floor_msg)
+        self.get_logger().info(f'[InitialPoseSetter] Published /current_floor: {self.floor}')
 
         self.get_logger().info('[InitialPoseSetter] Done. Shutting down.')
         raise SystemExit(0)

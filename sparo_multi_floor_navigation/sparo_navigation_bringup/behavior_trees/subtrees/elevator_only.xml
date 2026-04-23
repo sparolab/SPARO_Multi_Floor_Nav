@@ -3,7 +3,14 @@
 
   <BehaviorTree ID="ElevatorSequence">
     <Sequence name="ElevatorControl">
-
+      <GetCurrentFloor
+          map_frame="map"
+          base_frame="base_link"
+          floor0_z="0.0"
+          floor1_z="5.0"
+          floor2_z="10.0"
+          current_floor="{current_floor}"/>
+          
       <SelectNearestElevator
           world_frame="map"
           base_frame="base_link"

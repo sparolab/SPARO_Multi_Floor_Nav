@@ -63,7 +63,7 @@
                   stair_yaml="/home/test_ws/install/sparo_navigation_bringup/share/sparo_navigation_bringup/config/stair/stairs.yaml"
                   stair_id="{stair_id}"
                   direction="{direction}"
-                  yaw_tolerance="0.1"
+                  yaw_tolerance="0.01"
                   angular_speed="0.5"
                   timeout="10.0"
                   world_frame="map"
@@ -88,9 +88,9 @@
               <TurnRelative
                   angle_deg="{landing_turn1_deg}"
                   angular_speed="0.5"
-                  yaw_tolerance="0.02"
+                  yaw_tolerance="0.01"
                   timeout="30.0"
-                  ref_frame="map"
+                  ref_frame="odom"
                   base_frame="base_link"/>
 
               <MoveForwardDistance
@@ -102,9 +102,9 @@
               <TurnRelative
                   angle_deg="{landing_turn2_deg}"
                   angular_speed="0.5"
-                  yaw_tolerance="0.02"
+                  yaw_tolerance="0.01"
                   timeout="30.0"
-                  ref_frame="map"
+                  ref_frame="odom"
                   base_frame="base_link"/>
 
               <ClimbFlightRL

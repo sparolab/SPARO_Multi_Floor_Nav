@@ -118,9 +118,9 @@ def generate_launch_description():
         cmd=[
             'ros2', 'service', 'call',
             '/set_entity_state', 'gazebo_msgs/srv/SetEntityState',
-            '{state: {name: "robot_model", pose: {position: '
-            f'{{x: {spawn_x}, y: {spawn_y}, z: {gazebo_z}}}, '
-            'orientation: {w: 1.0}}}}'
+            '{state: {name: "robot_model", pose: {position: {x: ' + str(spawn_x) +
+            ', y: ' + str(spawn_y) + ', z: ' + str(gazebo_z) +
+            '}, orientation: {w: 1.0}}}}',
         ],
         output='screen'
     )
